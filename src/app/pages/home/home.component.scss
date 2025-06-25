@@ -1,0 +1,59 @@
+.title,
+.title-container,
+.stats-container,
+.pie-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  margin-bottom: 50px;
+}
+
+.stats-container {
+  margin-top: 30px;
+}
+
+h1 {
+  font-size: 50px;
+}
+
+.title-container p {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0d8284;
+  color: white;
+  padding: 8px 21px;
+  border-radius: 8px;
+  font-size: 35px;
+  font-weight: 200;
+  margin: 0;
+  height: auto;
+}
+
+.stats-container p {
+  background: white;
+  border: 3px solid #0d8284;
+  border-radius: 8px;
+  font-size: 25px;
+  font-weight: 100;
+  padding: 8px 21px;
+  margin: 0 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.stats-container p span {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.pie-chart {
+  margin-top: 60px;
+}

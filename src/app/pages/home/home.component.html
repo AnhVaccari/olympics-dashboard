@@ -1,3 +1,27 @@
-<h2>Olympic games app</h2>
+<div class="title">
+  <h1>Olympic Games Starter</h1>
+</div>
+
+<div class="title-container">
+  <p>Medals per Country</p>
+</div>
+
+<div class="stats-container">
+  <p>Numbers of JOs <span>10</span></p>
+
+  <p>Number of countries <span>10</span></p>
+</div>
+<div class="pie-chart">
+  <ngx-charts-pie-chart
+    [view]="view"
+    [results]="pieData"
+    [labels]="showLabels"
+    [doughnut]="isDoughnut"
+    [explodeSlices]="false"
+    [gradient]="false"
+  >
+  </ngx-charts-pie-chart>
+</div>
+
 <hr />
 <p>{{ (olympics$ | async)?.length }} data loaded</p>
