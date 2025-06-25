@@ -25,5 +25,3 @@ I suggest you to start by understanding this starter code. Pay an extra attentio
 Once mastered, you should continue by creating the typescript interfaces inside the `models` folder. As you can see I already created two files corresponding to the data included inside the `olympic.json`. With your interfaces, improve the code by replacing every `any` by the corresponding interface.
 
 You're now ready to implement the requested features.
-
-Good luck!
