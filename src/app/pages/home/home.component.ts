@@ -32,41 +32,20 @@ export class HomeComponent implements OnInit {
             0
           );
 
-          this.pieData = olympics.map((country) => ({
-            name: country.country,
-            value: country.participations.reduce(
+          this.pieData = olympics.map((country) => {
+            const totalMedals = country.participations.reduce(
               (sum, p) => sum + p.medalsCount,
               0
-            ),
-          }));
+            );
+            return {
+              name: country.country,
+              value: totalMedals,
+            };
+          });
 
-          this.olympics$ = of(olympics); // utile si tu veux continuer à afficher avec | async dans le template
+          this.olympics$ = of(olympics);
         }
       });
     });
   }
 }
-
-// view: [number, number] = [700, 400];
-
-// pieData = [
-//   {
-//     name: 'USA',
-//     value: 120,
-//   },
-//   {
-//     name: 'China',
-//     value: 100,
-//   },
-//   {
-//     name: 'Germany',
-//     value: 80,
-//   },
-//   {
-//     name: 'France',
-//     value: 60,
-//   },
-// ];
-
-// showLabels = true;
-// isDoughnut = false;
