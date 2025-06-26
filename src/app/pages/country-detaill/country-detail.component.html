@@ -1,1 +1,29 @@
-<p>country-detail works!</p>
+<div class="title-container">
+  <p>Name of the country</p>
+</div>
+
+<div class="stats-container">
+  <p>Number of entries <span>3</span></p>
+  <p>Total number medals <span>5</span></p>
+  <p>Total number of atletes <span>32</span></p>
+</div>
+
+<div class="line-chart">
+  <ngx-charts-line-chart
+    [view]="view"
+    [legend]="legend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [results]="lineData"
+  >
+  </ngx-charts-line-chart>
+</div>
+<div class="button-container">
+  <button class="button">
+    <span class="material-icons">arrow_back</span>
+    Retour
+  </button>
+</div>
