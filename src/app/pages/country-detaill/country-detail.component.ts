@@ -26,8 +26,8 @@ export class CountryDetailComponent implements OnInit {
   yAxis = true;
   showYAxisLabel = true;
   showXAxisLabel = true;
-  xAxisLabel = 'Années';
-  yAxisLabel = 'Nombre de Médailles';
+  xAxisLabel = 'YEAR';
+  yAxisLabel = 'Number of medals';
 
   countryName = '';
   numberOfEntries = 0;
