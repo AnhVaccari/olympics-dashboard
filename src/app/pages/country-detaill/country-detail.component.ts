@@ -5,8 +5,6 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
   selector: 'app-country-detail',
-  standalone: true,
-  imports: [],
   templateUrl: './country-detail.component.html',
   styleUrl: './country-detail.component.scss',
 })
@@ -20,7 +18,8 @@ export class CountryDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.countryId = this.route.snapshot.params['id'];
+    this.countryId = +this.route.snapshot.params['id'];
+
     this.olympicServive.getOlympics().subscribe((countries) => {
       if (countries) {
         this.countryData = countries.find(

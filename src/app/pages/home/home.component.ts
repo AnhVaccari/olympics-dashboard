@@ -12,7 +12,7 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class HomeComponent implements OnInit {
   public olympics$: Observable<OlympicCountry[]> = of([]);
-  pieData: { name: string; value: number }[] = [];
+  pieData: { name: string; value: number; extra?: { id: number } }[] = [];
   view: [number, number] = [700, 400];
   showLabels = true;
   isDoughnut = false;
@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
             return {
               name: country.country,
               value: totalMedals,
-              id: country.id,
+              extra: { id: country.id },
             };
           });
 
@@ -52,7 +52,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onSelectCountry(countryId: number) {
-    this.router.navigateByUrl(`country/${countryId}`);
+  onSelectCountry(event: any) {
+    const countryId = event.extra?.id;
+    if (countryId) {
+      this.router.navigateByUrl(`country/${countryId}`);
+    }
   }
 }
