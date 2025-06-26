@@ -22,6 +22,7 @@
     [doughnut]="isDoughnut"
     [explodeSlices]="false"
     [gradient]="false"
+    (select)="onSelectCountry($event.id)"
   >
     <ng-template #tooltipTemplate let-model="model">
       <div class="custom-tooltip">

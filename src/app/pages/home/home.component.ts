@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { OlympicCountry } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
@@ -19,7 +20,7 @@ export class HomeComponent implements OnInit {
   numberOfCountries = 0;
   numberOfJOs = 0;
 
-  constructor(private olympicService: OlympicService) {}
+  constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
     this.olympicService.loadInitialData().subscribe(() => {
@@ -34,12 +35,14 @@ export class HomeComponent implements OnInit {
 
           this.pieData = olympics.map((country) => {
             const totalMedals = country.participations.reduce(
-              (sum, p) => sum + p.medalsCount,
+              (sum, participation) => sum + participation.medalsCount,
               0
             );
+
             return {
               name: country.country,
               value: totalMedals,
+              id: country.id,
             };
           });
 
@@ -47,5 +50,9 @@ export class HomeComponent implements OnInit {
         }
       });
     });
+  }
+
+  onSelectCountry(countryId: number) {
+    this.router.navigateByUrl(`country/${countryId}`);
   }
 }
