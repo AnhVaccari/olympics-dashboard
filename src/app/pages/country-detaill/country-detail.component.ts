@@ -10,9 +10,16 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class CountryDetailComponent implements OnInit {
   countryId!: number;
-  countryData?: OlympicCountry;
+  countryDetail?: OlympicCountry;
+
+  lineData: {
+    name: string;
+    series: {
+      name: string;
+      value: number;
+    }[];
+  }[] = [];
   view: [number, number] = [700, 300];
-  // options
   legend = false;
   showLabels = true;
   xAxis = true;
@@ -21,46 +28,43 @@ export class CountryDetailComponent implements OnInit {
   showXAxisLabel = true;
   xAxisLabel = 'Années';
   yAxisLabel = 'Nombre de Médailles';
-  //timeline = true;
+
+  countryName = '';
+  numberOfEntries = 0;
+  totalMedals = 0;
+  totalAthletes = 0;
 
   constructor(
     private route: ActivatedRoute,
-    private olympicServive: OlympicService
+    private olympicService: OlympicService
   ) {}
 
   ngOnInit(): void {
     this.countryId = +this.route.snapshot.params['id'];
 
-    this.olympicServive.getOlympics().subscribe((countries) => {
-      if (countries) {
-        this.countryData = countries.find(
-          (country) => country.id === this.countryId
-        );
-      }
+    this.olympicService.loadInitialData().subscribe(() => {
+      this.olympicService.getCountryDetailById().subscribe((details) => {
+        const detail = details.find((country) => country.id === this.countryId);
+
+        if (detail) {
+          this.lineData = [
+            {
+              name: detail.country,
+              series: detail.medalsPerYear.map(
+                (medal: { year: { toString: any }; medals: any }) => ({
+                  name: medal.year.toString(),
+                  value: medal.medals,
+                })
+              ),
+            },
+          ];
+
+          this.countryName = detail.country;
+          this.numberOfEntries = detail.numberOfParticipations;
+          this.totalMedals = detail.totalMedals;
+          this.totalAthletes = detail.totalAthletes;
+        }
+      });
     });
   }
-
-  lineData = [
-    {
-      name: 'San Marino',
-      series: [
-        {
-          value: 10,
-          name: '2016',
-        },
-        {
-          value: 5,
-          name: '2019',
-        },
-        {
-          value: 28,
-          name: '2022',
-        },
-        {
-          value: 9,
-          name: '2025',
-        },
-      ],
-    },
-  ];
 }

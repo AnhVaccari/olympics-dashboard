@@ -12,7 +12,12 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class HomeComponent implements OnInit {
   public olympics$: Observable<OlympicCountry[]> = of([]);
-  pieData: { name: string; value: number; extra?: { id: number } }[] = [];
+
+  pieData: {
+    name: string;
+    value: number;
+    extra?: { id: number };
+  }[] = [];
   view: [number, number] = [700, 400];
   showLabels = true;
   isDoughnut = false;

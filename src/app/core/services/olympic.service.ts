@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { OlympicCountry } from '../models/Olympic';
 
 @Injectable({
@@ -28,5 +28,41 @@ export class OlympicService {
 
   getOlympics(): Observable<OlympicCountry[]> {
     return this.olympics$.asObservable();
+  }
+
+  getCountryDetailById(): Observable<any[]> {
+    return this.getOlympics().pipe(
+      map((countries) =>
+        countries.map((country) => {
+          const years = country.participations.map(
+            (participation) => participation.year
+          );
+
+          const medalsPerYear = country.participations.map((participation) => ({
+            year: participation.year,
+            medals: participation.medalsCount,
+          }));
+
+          const totalMedals = country.participations.reduce(
+            (sum, participation) => sum + participation.medalsCount,
+            0
+          );
+          const totalAthletes = country.participations.reduce(
+            (sum, participation) => sum + participation.athleteCount,
+            0
+          );
+
+          return {
+            id: country.id,
+            country: country.country,
+            years,
+            medalsPerYear,
+            totalMedals,
+            totalAthletes,
+            numberOfParticipations: country.participations.length,
+          };
+        })
+      )
+    );
   }
 }
