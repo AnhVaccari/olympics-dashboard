@@ -38,7 +38,7 @@ export class OlympicService {
         countries.map((country) => ({
           name: country.country,
           value: country.participations.reduce(
-            (sum, p) => sum + p.medalsCount,
+            (sum, participation) => sum + participation.medalsCount,
             0
           ),
           extra: { id: country.id },
@@ -74,22 +74,24 @@ export class OlympicService {
         if (!country) return null;
 
         const totalMedals = country.participations.reduce(
-          (sum, p) => sum + p.medalsCount,
+          (sum, participation) => sum + participation.medalsCount,
           0
         );
 
         const totalAthletes = country.participations.reduce(
-          (sum, p) => sum + p.athleteCount,
+          (sum, participation) => sum + participation.athleteCount,
           0
         );
 
         return {
           id: country.id,
           country: country.country,
-          years: country.participations.map((p) => p.year),
-          medalsPerYear: country.participations.map((p) => ({
-            year: p.year,
-            medals: p.medalsCount,
+          years: country.participations.map(
+            (participation) => participation.year
+          ),
+          medalsPerYear: country.participations.map((participation) => ({
+            year: participation.year,
+            medals: participation.medalsCount,
           })),
           totalMedals,
           totalAthletes,
