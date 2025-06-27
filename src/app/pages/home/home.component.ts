@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { OlympicCountry } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -11,47 +9,13 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent implements OnInit {
-  public olympics$: Observable<OlympicCountry[]> = of([]);
-
-  pieData: {
-    name: string;
-    value: number;
-    extra?: { id: number };
-  }[] = [];
-
-  numberOfCountries = 0;
-  numberOfJOs = 0;
+  pieData$ = this.olympicService.getPieChartData();
+  statistics$ = this.olympicService.getStatistics();
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.olympicService.loadInitialData().subscribe(() => {
-      this.olympicService.getOlympics().subscribe((olympics) => {
-        if (olympics) {
-          this.numberOfCountries = olympics.length;
-
-          this.numberOfJOs = olympics.reduce(
-            (total, country) => total + country.participations.length,
-            0
-          );
-
-          this.pieData = olympics.map((country) => {
-            const totalMedals = country.participations.reduce(
-              (sum, participation) => sum + participation.medalsCount,
-              0
-            );
-
-            return {
-              name: country.country,
-              value: totalMedals,
-              extra: { id: country.id },
-            };
-          });
-
-          this.olympics$ = of(olympics);
-        }
-      });
-    });
+    this.olympicService.loadInitialData().subscribe();
   }
 
   onSelectCountry(event: any) {
@@ -60,4 +24,48 @@ export class HomeComponent implements OnInit {
       this.router.navigateByUrl(`country/${countryId}`);
     }
   }
+
+  // ANCIEN CODE
+
+  //public olympics$: Observable<OlympicCountry[]> = of([]);
+
+  // pieData: {
+  //   name: string;
+  //   value: number;
+  //   extra?: { id: number };
+  // }[] = [];
+
+  // numberOfCountries = 0;
+  // numberOfJOs = 0;
+
+  // ngOnInit(): void {
+  //   this.olympicService
+  //     .loadInitialData()
+  //     .pipe(switchMap(() => this.olympicService.getOlympics()))
+  //     .subscribe((olympics) => {
+  //       if (olympics) {
+  //         this.numberOfCountries = olympics.length;
+
+  //         this.numberOfJOs = olympics.reduce(
+  //           (total, country) => total + country.participations.length,
+  //           0
+  //         );
+
+  //         this.pieData = olympics.map((country) => {
+  //           const totalMedals = country.participations.reduce(
+  //             (sum, participation) => sum + participation.medalsCount,
+  //             0
+  //           );
+
+  //           return {
+  //             name: country.country,
+  //             value: totalMedals,
+  //             extra: { id: country.id },
+  //           };
+  //         });
+
+  //         this.olympics$ = of(olympics);
+  //       }
+  //     });
+  // }
 }

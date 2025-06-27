@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { OlympicCountry } from 'src/app/core/models/Olympic';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -9,16 +10,9 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrl: './country-detail.component.scss',
 })
 export class CountryDetailComponent implements OnInit {
-  countryId!: number;
-  countryDetail?: OlympicCountry;
+  countryDetail$!: Observable<any>;
+  lineData$!: Observable<any[]>;
 
-  lineData: {
-    name: string;
-    series: {
-      name: string;
-      value: number;
-    }[];
-  }[] = [];
   legend = false;
   showLabels = true;
   xAxis = true;
@@ -28,42 +22,78 @@ export class CountryDetailComponent implements OnInit {
   xAxisLabel = 'YEAR';
   yAxisLabel = 'Number of medals';
 
-  countryName = '';
-  numberOfEntries = 0;
-  totalMedals = 0;
-  totalAthletes = 0;
-
   constructor(
     private route: ActivatedRoute,
     private olympicService: OlympicService
   ) {}
 
   ngOnInit(): void {
-    this.countryId = +this.route.snapshot.params['id'];
+    const countryId = +this.route.snapshot.params['id'];
 
-    this.olympicService.loadInitialData().subscribe(() => {
-      this.olympicService.getCountryDetailById().subscribe((details) => {
-        const detail = details.find((country) => country.id === this.countryId);
+    this.countryDetail$ = this.olympicService.getCountryDetailById(countryId);
 
-        if (detail) {
-          this.lineData = [
-            {
-              name: detail.country,
-              series: detail.medalsPerYear.map(
-                (medal: { year: { toString: any }; medals: any }) => ({
+    this.lineData$ = this.countryDetail$.pipe(
+      map((detail) =>
+        detail
+          ? [
+              {
+                name: detail.country,
+                series: detail.medalsPerYear.map((medal: any) => ({
                   name: medal.year.toString(),
                   value: medal.medals,
-                })
-              ),
-            },
-          ];
-
-          this.countryName = detail.country;
-          this.numberOfEntries = detail.numberOfParticipations;
-          this.totalMedals = detail.totalMedals;
-          this.totalAthletes = detail.totalAthletes;
-        }
-      });
-    });
+                })),
+              },
+            ]
+          : []
+      )
+    );
   }
+
+  // ANCIEN CODE
+
+  // countryId!: number;
+  // countryDetail?: OlympicCountry;
+
+  // lineData: {
+  //   name: string;
+  //   series: {
+  //     name: string;
+  //     value: number;
+  //   }[];
+  // }[] = [];
+
+  // countryName = '';
+  // numberOfEntries = 0;
+  // totalMedals = 0;
+  // totalAthletes = 0;
+
+  // ngOnInit(): void {
+  //   this.countryId = +this.route.snapshot.params['id'];
+
+  //   this.olympicService
+  //     .loadInitialData()
+  //     .pipe(switchMap(() => this.olympicService.getCountryDetailById()))
+  //     .subscribe((details) => {
+  //       const detail = details.find((country) => country.id === this.countryId);
+
+  //       if (detail) {
+  //         this.lineData = [
+  //           {
+  //             name: detail.country,
+  //             series: detail.medalsPerYear.map(
+  //               (medal: { year: { toString: any }; medals: any }) => ({
+  //                 name: medal.year.toString(),
+  //                 value: medal.medals,
+  //               })
+  //             ),
+  //           },
+  //         ];
+
+  //         this.countryName = detail.country;
+  //         this.numberOfEntries = detail.numberOfParticipations;
+  //         this.totalMedals = detail.totalMedals;
+  //         this.totalAthletes = detail.totalAthletes;
+  //       }
+  //     });
+  // }
 }

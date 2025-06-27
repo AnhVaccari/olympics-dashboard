@@ -9,7 +9,7 @@ import { OlympicCountry } from '../models/Olympic';
 })
 export class OlympicService {
   private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<any>(undefined);
+  private olympics$ = new BehaviorSubject<OlympicCountry[] | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -27,42 +27,111 @@ export class OlympicService {
   }
 
   getOlympics(): Observable<OlympicCountry[]> {
-    return this.olympics$.asObservable();
+    return this.olympics$.asObservable().pipe(map((data) => data || []));
   }
 
-  getCountryDetailById(): Observable<any[]> {
+  getPieChartData(): Observable<
+    { name: string; value: number; extra?: { id: number } }[]
+  > {
     return this.getOlympics().pipe(
       map((countries) =>
-        countries.map((country) => {
-          const years = country.participations.map(
-            (participation) => participation.year
-          );
-
-          const medalsPerYear = country.participations.map((participation) => ({
-            year: participation.year,
-            medals: participation.medalsCount,
-          }));
-
-          const totalMedals = country.participations.reduce(
-            (sum, participation) => sum + participation.medalsCount,
+        countries.map((country) => ({
+          name: country.country,
+          value: country.participations.reduce(
+            (sum, p) => sum + p.medalsCount,
             0
-          );
-          const totalAthletes = country.participations.reduce(
-            (sum, participation) => sum + participation.athleteCount,
-            0
-          );
-
-          return {
-            id: country.id,
-            country: country.country,
-            years,
-            medalsPerYear,
-            totalMedals,
-            totalAthletes,
-            numberOfParticipations: country.participations.length,
-          };
-        })
+          ),
+          extra: { id: country.id },
+        }))
       )
     );
   }
+
+  getStatistics(): Observable<{
+    numberOfCountries: number;
+    numberOfJOs: number;
+  }> {
+    return this.getOlympics().pipe(
+      map((countries) => ({
+        numberOfCountries: countries.length,
+        numberOfJOs: countries.reduce(
+          (total, country) => total + country.participations.length,
+          0
+        ),
+      }))
+    );
+  }
+
+  getCountryById(id: number): Observable<OlympicCountry | undefined> {
+    return this.getOlympics().pipe(
+      map((countries) => countries.find((country) => country.id === id))
+    );
+  }
+
+  getCountryDetailById(id: number): Observable<any> {
+    return this.getCountryById(id).pipe(
+      map((country) => {
+        if (!country) return null;
+
+        const totalMedals = country.participations.reduce(
+          (sum, p) => sum + p.medalsCount,
+          0
+        );
+
+        const totalAthletes = country.participations.reduce(
+          (sum, p) => sum + p.athleteCount,
+          0
+        );
+
+        return {
+          id: country.id,
+          country: country.country,
+          years: country.participations.map((p) => p.year),
+          medalsPerYear: country.participations.map((p) => ({
+            year: p.year,
+            medals: p.medalsCount,
+          })),
+          totalMedals,
+          totalAthletes,
+          numberOfParticipations: country.participations.length,
+        };
+      })
+    );
+  }
+
+  // getCountryDetailById(): Observable<any[]> {
+  //   return this.getOlympics().pipe(
+  //     map((countries) =>
+  //       countries.map((country) => {
+  //         const years = country.participations.map(
+  //           (participation) => participation.year
+  //         );
+
+  //         const medalsPerYear = country.participations.map((participation) => ({
+  //           year: participation.year,
+  //           medals: participation.medalsCount,
+  //         }));
+
+  //         const totalMedals = country.participations.reduce(
+  //           (sum, participation) => sum + participation.medalsCount,
+  //           0
+  //         );
+  //         const totalAthletes = country.participations.reduce(
+  //           (sum, participation) => sum + participation.athleteCount,
+  //           0
+  //         );
+
+  //         return {
+  //           id: country.id,
+  //           country: country.country,
+  //           years,
+  //           medalsPerYear,
+  //           totalMedals,
+  //           totalAthletes,
+  //           numberOfParticipations: country.participations.length,
+  //         };
+  //       })
+  //     )
+  //   );
+  // }
 }
