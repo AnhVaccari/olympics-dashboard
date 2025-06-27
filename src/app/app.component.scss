@@ -1,17 +1,18 @@
-::ng-deep .ngx-charts-tooltip-content {
-  background-color: #0d8284 !important;
-  color: white !important;
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 14px;
-}
+::ng-deep {
+  .ngx-charts-tooltip-content {
+    background-color: #0d8284 !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding: 10px 10px !important;
+    font-size: 14px;
+  }
 
-::ng-deep .pie-label {
-  font-size: 20px !important;
-  font-weight: 100;
-}
+  .pie-label {
+    font-size: 20px !important;
+    font-weight: 100;
+  }
 
-::ng-deep .pie-label-line {
-  stroke-dasharray: 0 !important;
-  stroke-width: 2px !important;
+  .pie-label-line {
+    stroke-width: 1px !important;
+  }
 }

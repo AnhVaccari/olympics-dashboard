@@ -18,8 +18,6 @@ export class HomeComponent implements OnInit {
     value: number;
     extra?: { id: number };
   }[] = [];
-  showLabels = true;
-  isDoughnut = false;
 
   numberOfCountries = 0;
   numberOfJOs = 0;

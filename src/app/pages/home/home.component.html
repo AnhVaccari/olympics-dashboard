@@ -17,10 +17,11 @@
 <div class="pie-chart">
   <ngx-charts-pie-chart
     [results]="pieData"
-    [labels]="showLabels"
-    [doughnut]="isDoughnut"
+    [labels]="true"
+    [doughnut]="false"
     [explodeSlices]="false"
     [gradient]="false"
+    [animations]="false"
     (select)="onSelectCountry($event)"
   >
     <ng-template #tooltipTemplate let-model="model">
