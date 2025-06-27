@@ -52,7 +52,14 @@ h1 {
 }
 
 .line-chart {
+  max-width: 700px;
+  height: 300px;
+  margin: 0 auto;
   margin-top: 60px;
+
+  @media (max-width: 768px) {
+    height: 200px;
+  }
 }
 
 .button-container a {
@@ -77,4 +84,36 @@ h1 {
 
 a {
   text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .title-container p {
+    font-size: 40px;
+  }
+
+  .stats-container p {
+    font-size: 20px;
+    padding: 6px 16px;
+    margin: 0 10px;
+  }
+
+  .stats-container p span {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title-container p {
+    font-size: 30px;
+  }
+
+  .stats-container p {
+    font-size: 18px;
+    padding: 4px 12px;
+    margin: 0 5px;
+  }
+
+  .stats-container p span {
+    font-size: 18px;
+  }
 }

@@ -18,7 +18,6 @@ export class HomeComponent implements OnInit {
     value: number;
     extra?: { id: number };
   }[] = [];
-  view: [number, number] = [700, 400];
   showLabels = true;
   isDoughnut = false;
 

@@ -19,7 +19,6 @@ export class CountryDetailComponent implements OnInit {
       value: number;
     }[];
   }[] = [];
-  view: [number, number] = [700, 300];
   legend = false;
   showLabels = true;
   xAxis = true;
