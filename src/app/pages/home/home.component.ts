@@ -24,48 +24,4 @@ export class HomeComponent implements OnInit {
       this.router.navigateByUrl(`country/${countryId}`);
     }
   }
-
-  // ANCIEN CODE
-
-  //public olympics$: Observable<OlympicCountry[]> = of([]);
-
-  // pieData: {
-  //   name: string;
-  //   value: number;
-  //   extra?: { id: number };
-  // }[] = [];
-
-  // numberOfCountries = 0;
-  // numberOfJOs = 0;
-
-  // ngOnInit(): void {
-  //   this.olympicService
-  //     .loadInitialData()
-  //     .pipe(switchMap(() => this.olympicService.getOlympics()))
-  //     .subscribe((olympics) => {
-  //       if (olympics) {
-  //         this.numberOfCountries = olympics.length;
-
-  //         this.numberOfJOs = olympics.reduce(
-  //           (total, country) => total + country.participations.length,
-  //           0
-  //         );
-
-  //         this.pieData = olympics.map((country) => {
-  //           const totalMedals = country.participations.reduce(
-  //             (sum, participation) => sum + participation.medalsCount,
-  //             0
-  //           );
-
-  //           return {
-  //             name: country.country,
-  //             value: totalMedals,
-  //             extra: { id: country.id },
-  //           };
-  //         });
-
-  //         this.olympics$ = of(olympics);
-  //       }
-  //     });
-  // }
 }

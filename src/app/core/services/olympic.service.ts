@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { OlympicCountry } from '../models/Olympic';
 
@@ -16,12 +16,12 @@ export class OlympicService {
   loadInitialData(): Observable<OlympicCountry[]> {
     return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
       tap((data) => this.olympics$.next(data)),
-      catchError((error, caught) => {
+      catchError((error) => {
         // TODO: improve error handling
-        console.error(error);
+        console.error('Failed to load data:', error);
         // can be useful to end loading state and let the user know something went wrong
-        this.olympics$.next(null);
-        return caught;
+        this.olympics$.next([]); // vide les données
+        return of([]); // retourne un flux vide pour ne pas planter l’app
       })
     );
   }
@@ -100,40 +100,4 @@ export class OlympicService {
       })
     );
   }
-
-  // getCountryDetailById(): Observable<any[]> {
-  //   return this.getOlympics().pipe(
-  //     map((countries) =>
-  //       countries.map((country) => {
-  //         const years = country.participations.map(
-  //           (participation) => participation.year
-  //         );
-
-  //         const medalsPerYear = country.participations.map((participation) => ({
-  //           year: participation.year,
-  //           medals: participation.medalsCount,
-  //         }));
-
-  //         const totalMedals = country.participations.reduce(
-  //           (sum, participation) => sum + participation.medalsCount,
-  //           0
-  //         );
-  //         const totalAthletes = country.participations.reduce(
-  //           (sum, participation) => sum + participation.athleteCount,
-  //           0
-  //         );
-
-  //         return {
-  //           id: country.id,
-  //           country: country.country,
-  //           years,
-  //           medalsPerYear,
-  //           totalMedals,
-  //           totalAthletes,
-  //           numberOfParticipations: country.participations.length,
-  //         };
-  //       })
-  //     )
-  //   );
-  // }
 }

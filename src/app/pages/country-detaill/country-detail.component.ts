@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { OlympicService } from 'src/app/core/services/olympic.service';
@@ -24,11 +24,17 @@ export class CountryDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private olympicService: OlympicService
   ) {}
 
   ngOnInit(): void {
     const countryId = +this.route.snapshot.params['id'];
+
+    if (!countryId) {
+      this.router.navigate(['/not-found']);
+      return;
+    }
 
     this.countryDetail$ = this.olympicService.getCountryDetailById(countryId);
 
@@ -48,52 +54,4 @@ export class CountryDetailComponent implements OnInit {
       )
     );
   }
-
-  // ANCIEN CODE
-
-  // countryId!: number;
-  // countryDetail?: OlympicCountry;
-
-  // lineData: {
-  //   name: string;
-  //   series: {
-  //     name: string;
-  //     value: number;
-  //   }[];
-  // }[] = [];
-
-  // countryName = '';
-  // numberOfEntries = 0;
-  // totalMedals = 0;
-  // totalAthletes = 0;
-
-  // ngOnInit(): void {
-  //   this.countryId = +this.route.snapshot.params['id'];
-
-  //   this.olympicService
-  //     .loadInitialData()
-  //     .pipe(switchMap(() => this.olympicService.getCountryDetailById()))
-  //     .subscribe((details) => {
-  //       const detail = details.find((country) => country.id === this.countryId);
-
-  //       if (detail) {
-  //         this.lineData = [
-  //           {
-  //             name: detail.country,
-  //             series: detail.medalsPerYear.map(
-  //               (medal: { year: { toString: any }; medals: any }) => ({
-  //                 name: medal.year.toString(),
-  //                 value: medal.medals,
-  //               })
-  //             ),
-  //           },
-  //         ];
-
-  //         this.countryName = detail.country;
-  //         this.numberOfEntries = detail.numberOfParticipations;
-  //         this.totalMedals = detail.totalMedals;
-  //         this.totalAthletes = detail.totalAthletes;
-  //       }
-  //     });
-  // }
 }
